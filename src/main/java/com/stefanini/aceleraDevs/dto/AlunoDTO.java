@@ -1,5 +1,10 @@
 package com.stefanini.aceleraDevs.dto;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.stefanini.aceleraDevs.model.Aluno;
+
 public class AlunoDTO {
 
     private String nome;
@@ -21,6 +26,15 @@ public class AlunoDTO {
         this.cpf = cpf;
         this.email = email;
         this.idTurma = idTurma;
+    }
+
+    public AlunoDTO(Aluno aluno) {
+        this.nome = aluno.getNome();
+        this.matricula = aluno.getMatricula();
+        this.cpf = aluno.getDadosPessoais().getCpf();
+        this.email = aluno.getDadosPessoais().getEmail();
+        this.idTurma = aluno.getTurma().getId();
+
     }
 
     public String getNome() {
@@ -62,4 +76,9 @@ public class AlunoDTO {
     public void setIdTurma(Long idTurma) {
         this.idTurma = idTurma;
     }
+
+    public static List<AlunoDTO> converter(List<Aluno> alunos) {
+        return alunos.stream().map(AlunoDTO::new).collect(Collectors.toList());
+    }
+
 }

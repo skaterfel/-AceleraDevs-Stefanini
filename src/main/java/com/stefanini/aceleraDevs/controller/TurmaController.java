@@ -1,18 +1,23 @@
 package com.stefanini.aceleraDevs.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+
 import com.stefanini.aceleraDevs.dto.TurmaDTO;
 import com.stefanini.aceleraDevs.exception.CursoNotFoundException;
 import com.stefanini.aceleraDevs.exception.TurmaNotFoundException;
 import com.stefanini.aceleraDevs.mapper.TurmaDTOService;
 import com.stefanini.aceleraDevs.model.Turma;
+import com.stefanini.aceleraDevs.repository.TurmaRepository;
 import com.stefanini.aceleraDevs.service.TurmaService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
-@Controller
+@RestController
 public class TurmaController {
 
     private final TurmaService turmaService;
@@ -25,7 +30,7 @@ public class TurmaController {
     }
 
     @Autowired
-
+    private TurmaRepository turmaRepository;
 
     @RequestMapping(path = "/turma")
     public ModelAndView loadHtml() {
@@ -46,6 +51,13 @@ public class TurmaController {
         turmaService.save(newTurma);
 
         return "redirect:/turma";
+    }
+
+    @GetMapping("/turmas")
+    public List<TurmaDTO> listar() {
+        List<Turma> turmas = turmaRepository.findAll();
+        return TurmaDTO.converter(turmas);
+
     }
 
 }

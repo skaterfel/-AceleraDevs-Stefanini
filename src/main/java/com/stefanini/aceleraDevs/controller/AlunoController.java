@@ -1,17 +1,22 @@
 package com.stefanini.aceleraDevs.controller;
 
-import com.stefanini.aceleraDevs.dto.AlunoDTO;
-import com.stefanini.aceleraDevs.exception.TurmaNotFoundException;
-import com.stefanini.aceleraDevs.model.Aluno;
-import com.stefanini.aceleraDevs.mapper.AlunoDTOService;
-import com.stefanini.aceleraDevs.service.AlunoService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-@Controller
+import com.stefanini.aceleraDevs.dto.AlunoDTO;
+import com.stefanini.aceleraDevs.exception.TurmaNotFoundException;
+import com.stefanini.aceleraDevs.mapper.AlunoDTOService;
+import com.stefanini.aceleraDevs.model.Aluno;
+import com.stefanini.aceleraDevs.repository.AlunoRepository;
+import com.stefanini.aceleraDevs.service.AlunoService;
+
+@RestController
 public class AlunoController {
 
     private final AlunoService alunoService;
@@ -24,7 +29,7 @@ public class AlunoController {
     }
 
     @Autowired
-
+    private AlunoRepository alunoRepository;
 
     @RequestMapping(path = "/aluno")
     public ModelAndView loadHtml() {
@@ -45,6 +50,13 @@ public class AlunoController {
         alunoService.save(newAluno);
 
         return "redirect:/aluno";
+    }
+
+    @GetMapping("/alunos")
+    public List<AlunoDTO> listar() {
+        List<Aluno> alunos = alunoRepository.findAll();
+        return AlunoDTO.converter(alunos);
+
     }
 
 }

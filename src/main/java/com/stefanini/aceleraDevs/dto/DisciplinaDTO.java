@@ -1,10 +1,13 @@
 package com.stefanini.aceleraDevs.dto;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.stefanini.aceleraDevs.model.Disciplina;
+
 public class DisciplinaDTO {
 
-
-
-   private String nome;
+    private String nome;
 
     private String codigo;
 
@@ -21,7 +24,8 @@ public class DisciplinaDTO {
     public DisciplinaDTO() {
     }
 
-    public DisciplinaDTO(String nome, String codigo, String conteudoProgramatico, Integer numeroCreditos, Integer totalHoras, Long turma, Long curso) {
+    public DisciplinaDTO(String nome, String codigo, String conteudoProgramatico, Integer numeroCreditos,
+            Integer totalHoras, Long turma, Long curso) {
         this.nome = nome;
         this.codigo = codigo;
         this.conteudoProgramatico = conteudoProgramatico;
@@ -29,6 +33,16 @@ public class DisciplinaDTO {
         this.totalHoras = totalHoras;
         this.turma = turma;
         this.curso = curso;
+    }
+
+    public DisciplinaDTO(Disciplina disciplina) {
+        this.nome = disciplina.getNome();
+        this.codigo = disciplina.getCodigo();
+        this.conteudoProgramatico = disciplina.getConteudoProgramatico();
+        this.numeroCreditos = disciplina.getNumeroCreditos();
+        this.totalHoras = disciplina.getTotalHoras();
+        this.turma = disciplina.getTurma().getId();
+        this.curso = disciplina.getCurso().getId();
     }
 
     public String getNome() {
@@ -85,5 +99,9 @@ public class DisciplinaDTO {
 
     public void setCurso(Long curso) {
         this.curso = curso;
+    }
+
+    public static List<DisciplinaDTO> converter(List<Disciplina> disciplinas) {
+        return disciplinas.stream().map(DisciplinaDTO::new).collect(Collectors.toList());
     }
 }
